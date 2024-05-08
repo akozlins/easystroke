@@ -1,16 +1,3 @@
 #
 
 /cmake-build*/
-
-*.Po
-easystroke
-easystroke.1
-gui.c
-desktop.c
-*.swp
-po/??
-po/??_??
-po/POTFILES.in
-po/*.pot
-easystroke.desktop
-.clang_complete

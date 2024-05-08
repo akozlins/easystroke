@@ -111,7 +111,6 @@ class CellEditableAccel : Gtk.EventBox, Gtk.CellEditable {
 	}
 }
 
-
 class CellEditableCombo : Gtk.ComboBoxText {
 	new CellRendererTextish parent;
 	new string path;
