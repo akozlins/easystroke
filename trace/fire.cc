@@ -13,11 +13,17 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#include "annotate.h"
-#include <stdio.h>
+
+#include "fire.h"
+
+#include "../main.h"
+
 #include <X11/Xlib.h>
 
-Annotate::Annotate() {
+#include <math.h>
+#include <stdio.h>
+
+Fire::Fire() {
 	const char *ofc = "org.freedesktop.compiz";
 	GError *error = 0;
 	bus = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
@@ -25,26 +31,32 @@ Annotate::Annotate() {
 		g_error_free(error);
 		throw DBusException();
 	}
-
-	char draw[256];
+	char add[256];
 	char clear[256];
-	snprintf(draw, sizeof(draw), "/org/freedesktop/compiz/annotate/screen%d/draw", DefaultScreen(dpy));
-	snprintf(clear, sizeof(clear), "/org/freedesktop/compiz/annotate/screen%d/clear_key", DefaultScreen(dpy));
+	snprintf(add, sizeof(add), "/org/freedesktop/compiz/firepaint/screen%d/add_particle", DefaultScreen(dpy));
+	snprintf(clear, sizeof(clear), "/org/freedesktop/compiz/firepaint/screen%d/clear_key", DefaultScreen(dpy));
 
-	draw_proxy = dbus_g_proxy_new_for_name(bus, ofc, draw, ofc);
+	point_proxy = dbus_g_proxy_new_for_name(bus, ofc, add, ofc);
 	clear_proxy = dbus_g_proxy_new_for_name(bus, ofc, clear, ofc);
 }
 
-void Annotate::draw(Point p, Point q) {
-	dbus_g_proxy_call_no_reply(draw_proxy, "activate",
+void Fire::add_point(float x, float y) {
+	dbus_g_proxy_call_no_reply(point_proxy, "activate",
 			G_TYPE_STRING, "root", G_TYPE_INT,    gint(ROOT),
-			G_TYPE_STRING, "x1",   G_TYPE_DOUBLE, gdouble(p.x),
-			G_TYPE_STRING, "y1",   G_TYPE_DOUBLE, gdouble(p.y),
-			G_TYPE_STRING, "x2",   G_TYPE_DOUBLE, gdouble(q.x),
-			G_TYPE_STRING, "y2",   G_TYPE_DOUBLE, gdouble(q.y),
+			G_TYPE_STRING, "x",   G_TYPE_DOUBLE, gdouble(x),
+			G_TYPE_STRING, "y",   G_TYPE_DOUBLE, gdouble(y),
 			G_TYPE_INVALID);
 }
-void Annotate::end_() {
+
+void Fire::draw(Point p, Point q) {
+	float dist = hypot(p.x-q.x, p.y-q.y);
+	leftover -= dist;
+	while (leftover < 0.01) {
+		add_point(q.x + (q.x-p.x)*leftover/dist, q.y + (q.y-p.y)*leftover/dist);
+		leftover += 5.0;
+	}
+}
+void Fire::timeout() {
 	dbus_g_proxy_call_no_reply(clear_proxy, "activate",
 			G_TYPE_STRING, "root", G_TYPE_INT,    gint(ROOT),
 			G_TYPE_INVALID);

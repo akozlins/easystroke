@@ -15,17 +15,18 @@
  */
 #include "win.h"
 #include "main.h"
-#include "shape.h"
 #include "prefs.h"
 #include "actiondb.h"
 #include "prefdb.h"
 #include "trace.h"
-#include "annotate.h"
-#include "fire.h"
-#include "water.h"
-#include "composite.h"
 #include "grabber.h"
 #include "handler.h"
+
+#include "trace/shape.h"
+#include "trace/annotate.h"
+#include "trace/fire.h"
+#include "trace/water.h"
+#include "trace/composite.h"
 
 #include <glibmm/i18n.h>
 

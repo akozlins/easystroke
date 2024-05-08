@@ -13,12 +13,15 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#include <gdk/gdk.h>
-#include "prefdb.h"
+
 #include "shape.h"
-#include "main.h"
+
+#include "../prefdb.h"
+#include "../main.h"
 
 #include <X11/extensions/shape.h>
+
+#include <gdk/gdk.h>
 
 Shape::Shape() {
 	int w = gdk_screen_width();

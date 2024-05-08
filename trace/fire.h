@@ -13,21 +13,26 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#ifndef __WATER_H__
-#define __WATER_H__
-#include "trace.h"
-#include "main.h"
+#ifndef __FIRE_H__
+#define __FIRE_H__
+
+#include "../trace.h"
+
 #include <dbus/dbus-glib.h>
 
-class Water : public Trace {
+class Fire : public Trace, public Timeout {
 	DBusGConnection *bus;
-	DBusGProxy *line_proxy;
+	DBusGProxy *point_proxy;
+	DBusGProxy *clear_proxy;
+	float leftover;
 
 	virtual void draw(Point p, Point q);
-	virtual void start_() {}
-	virtual void end_() {}
+	void add_point(float, float);
+	virtual void start_() { if (remove_timeout()) timeout(); leftover = 0; }
+	virtual void end_() { set_timeout(250); }
+	virtual void timeout();
 public:
-	Water();
+	Fire();
 };
 
 #endif

@@ -15,9 +15,10 @@
  */
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
-#include "util.h"
-#include "trace.h"
-#include "main.h"
+
+#include "../trace.h"
+
+#include <X11/X.h>
 
 class Shape : public Trace, protected Timeout {
 	Window win;

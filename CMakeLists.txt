@@ -4,6 +4,7 @@ project(easystroke LANGUAGES C CXX)
 
 file(GLOB SOURCES
     *.c *.cc
+    trace/*.cc
 )
 
 find_package(PkgConfig REQUIRED)

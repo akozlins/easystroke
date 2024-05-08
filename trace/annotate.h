@@ -13,31 +13,22 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#ifndef __COMPOSITE_H__
-#define __COMPOSITE_H__
-#include <gtkmm.h>
-#include "trace.h"
-#include "main.h"
-#include <list>
+#ifndef __ANNOTATE_H__
+#define __ANNOTATE_H__
 
-class Popup : public Gtk::Window {
-	bool on_draw(const ::Cairo::RefPtr< ::Cairo::Context>& ctx);
-	void draw_line(Cairo::RefPtr<Cairo::Context> ctx);
-	Gdk::Rectangle rect;
-public:
-	Popup(int x1, int y1, int x2, int y2);
-	void invalidate(int x1, int y1, int x2, int y2);
-};
+#include "../trace.h"
+#include <dbus/dbus-glib.h>
 
-class Composite : public Trace {
-	int num_x, num_y;
-	Popup ***pieces;
+class Annotate : public Trace {
+	DBusGConnection *bus;
+	DBusGProxy *draw_proxy;
+	DBusGProxy *clear_proxy;
+
 	virtual void draw(Point p, Point q);
-	virtual void start_();
+	virtual void start_() {}
 	virtual void end_();
 public:
-	Composite();
-	virtual ~Composite();
+	Annotate();
 };
 
 #endif

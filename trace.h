@@ -16,8 +16,11 @@
 #ifndef __TRACE_H__
 #define __TRACE_H__
 
-#include <exception>
+#include "util.h"
+
 #include <glibmm/i18n.h>
+
+#include <exception>
 
 struct DBusException: public std::exception {
 	virtual const char* what() const throw() { return _("Connection to DBus failed"); }
