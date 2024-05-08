@@ -53,7 +53,37 @@ add_custom_command(OUTPUT cellrenderertextish.h cellrenderertextish.c
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cellrenderertextish.vala
 )
 
+add_custom_command(OUTPUT easystroke.desktop
+    COMMAND intltool-merge --utf8 --desktop-style ${CMAKE_CURRENT_SOURCE_DIR}/po ${CMAKE_CURRENT_SOURCE_DIR}/easystroke.desktop.in easystroke.desktop
+    VERBATIM
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/easystroke.desktop.in
+)
+
+add_custom_command(OUTPUT desktop.cpp
+    COMMAND echo "const char* desktop_file = R\\\"\\<\\>\\(" > desktop.cpp
+    COMMAND cat easystroke.desktop
+        | sed -s 's/Exec=easystroke/Exec=%1$$s/'
+        >> desktop.cpp
+    COMMAND echo "\\)\\<\\>\\\"\\;" >> desktop.cpp
+    DEPENDS easystroke.desktop
+)
+
 install(
     TARGETS easystroke
     DESTINATION bin
 )
+
+install(
+    FILES easystroke.svg
+    DESTINATION share/icons/hicolor/scalable/apps
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/easystroke.desktop
+    DESTINATION share/applications
+)
+
+#install(
+#    FILES ${CMAKE_CURRENT_BINARY_DIR}/po/*/LC_MESSAGES/easystroke.mo
+#    DESTINATION share/locale
+#)
