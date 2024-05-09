@@ -21,6 +21,7 @@ find_package(Boost REQUIRED COMPONENTS serialization filesystem)
 add_executable(easystroke
     ${SOURCES}
     ${CMAKE_CURRENT_BINARY_DIR}/gui.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/desktop.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/cellrenderertextish.c
 )
 
